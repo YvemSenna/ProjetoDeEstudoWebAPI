@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SistemaDeTarefas.Models;
+using SistemaDeTarefas.Repositorios.Interfaces;
 
 namespace SistemaDeTarefas.Controllers
 {
@@ -7,10 +9,33 @@ namespace SistemaDeTarefas.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult <List<UsuarioController>> BuscarTodosUsuario()
+        private readonly IUsuarioRepositorio _usuarioRepositorio;
+
+        public UsuarioController(IUsuarioRepositorio usuarioRepositorio)
         {
-            return Ok();
+            _usuarioRepositorio = usuarioRepositorio;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult <List<UsuarioController>>> BuscarTodosUsuario()
+        {
+            List<UsuarioModel> usuario = await _usuarioRepositorio.BuscarTodosUsuarios();
+            return Ok(usuario);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UsuarioController>> BuscarPorId(int id)
+        {
+            UsuarioModel usuario = await _usuarioRepositorio.BuscarPorId(id);
+            return Ok(usuario);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<UsuarioModel>> Cadastrar([FromBody] UsuarioModel usuarioModel)
+        {
+            UsuarioModel usuario = await _usuarioRepositorio.Adicionar(usuarioModel);
+            return Ok(usuario);
+
         }
     }
 }
