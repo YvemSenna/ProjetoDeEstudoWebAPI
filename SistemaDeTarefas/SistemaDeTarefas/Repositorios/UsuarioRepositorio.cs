@@ -23,12 +23,14 @@ public class UsuarioRepositorio : IUsuarioRepositorio
         return await _dbContext.Usuarios.ToListAsync();
 
     }
+
     public async Task<UsuarioModel> Adicionar(UsuarioModel usuario)
     {
         await _dbContext.Usuarios.AddAsync(usuario);
         await _dbContext.SaveChangesAsync();
         return usuario;
     }
+
     public async Task<UsuarioModel> Atualizar(UsuarioModel usuario, int id)
     {
         UsuarioModel usuarioPorId = await BuscarPorId(id);
@@ -45,6 +47,7 @@ public class UsuarioRepositorio : IUsuarioRepositorio
 
         return usuarioPorId;
     }
+
     public async Task<bool> Apagar(int id)
     {
         UsuarioModel usuarioPorId = await BuscarPorId(id);
